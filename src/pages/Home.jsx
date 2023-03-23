@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { AiOutlineSearch } from 'react-icons/ai'
 import api from '../api'
 
 import BookCard from '../components/BookCard'
 import Spinner from '../components/Spinner'
 import Navbar from '../components/Navbar'
 import { useLocalStorageState } from '../lib/hooks'
+import SearchInput from '../components/SearchInput'
 
 function Home() {
   const [query, setQuery] = useState('')
@@ -40,24 +40,11 @@ function Home() {
       <Navbar />
 
       <section className='mx-auto flex max-h-screen max-w-5xl flex-1 flex-col gap-4'>
-        <form role='search' aria-label='Search' onSubmit={handleSubmit}>
-          <label htmlFor='search' className='sr-only'>
-            Search books
-          </label>
-          <div className='relative mx-4 mt-4'>
-            <span className='absolute inset-y-0 left-0 flex items-center pl-3'>
-              <AiOutlineSearch className='h-5 w-5 text-gray-400' />
-            </span>
-            <input
-              id='search'
-              type='search'
-              placeholder='Search book name, author, edition...'
-              className='w-full rounded-full border border-gray-300 bg-transparent py-2 pl-8 pr-4 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500'
-              value={query}
-              onChange={({ target: { value } }) => setQuery(value)}
-            />
-          </div>
-        </form>
+        <SearchInput
+          handleSubmit={handleSubmit}
+          query={query}
+          setQuery={setQuery}
+        />
 
         <section className='grid gap-4 overflow-auto p-4 sm:p-8'>
           {books.map((item, index) => (
