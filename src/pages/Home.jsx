@@ -5,12 +5,14 @@ import api from '../api'
 import BookCard from '../components/BookCard'
 import Spinner from '../components/Spinner'
 import Navbar from '../components/Navbar'
+import { useLocalStorageState } from '../lib/hooks'
 
 function Home() {
   const [query, setQuery] = useState('')
   const [startIndex, setStartIndex] = useState(0)
   const [books, setBooks] = useState([])
   const [loading, setLoading] = useState(false)
+  const [, setLocalBooks] = useLocalStorageState('|_REACT_BOOKS_|', [])
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -67,6 +69,7 @@ function Home() {
               thumbnail={item.thumbnail}
               publisher={item.publisher}
               description={item.description}
+              setLocal={setLocalBooks}
             />
           ))}
 

@@ -1,5 +1,6 @@
-import bookPlaceholderSvg from '../assets/book-placeholder.svg'
 import { AiOutlinePlus } from 'react-icons/ai'
+
+import bookPlaceholderSvg from '../assets/book-placeholder.svg'
 
 export default function BookCard({
   id,
@@ -7,10 +8,25 @@ export default function BookCard({
   thumbnail = bookPlaceholderSvg,
   description,
   authors,
-  publisher
+  publisher,
+  setLocal
 }) {
   function handleClick() {
-    alert([id, title, thumbnail, description, authors, publisher].join('\n\n'))
+    const newBook = {
+      id,
+      title,
+      thumbnail,
+      description,
+      authors,
+      publisher
+    }
+
+    setLocal((prev) => {
+      const exist = prev?.find((i) => i.id === id)
+      if (exist) return prev
+
+      return [...prev, newBook]
+    })
   }
 
   return (
