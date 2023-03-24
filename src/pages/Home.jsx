@@ -4,7 +4,6 @@ import api from '../api'
 import BookCard from '../components/BookCard'
 import Spinner from '../components/Spinner'
 import Navbar from '../components/Navbar'
-import { useLocalStorageState } from '../lib/hooks'
 import SearchInput from '../components/SearchInput'
 
 function Home() {
@@ -12,7 +11,6 @@ function Home() {
   const [startIndex, setStartIndex] = useState(0)
   const [books, setBooks] = useState([])
   const [loading, setLoading] = useState(false)
-  const [, setLocalBooks] = useLocalStorageState('|_REACT_BOOKS_|', [])
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -32,7 +30,7 @@ function Home() {
     setLoading(true)
     const newBooks = await api.books.search(query, newStartIndex)
     setLoading(false)
-    setBooks((prev) => prev.concat(newBooks))
+    setBooks((prev) => [...prev, ...newBooks])
   }
 
   return (
@@ -56,7 +54,6 @@ function Home() {
               thumbnail={item.thumbnail}
               publisher={item.publisher}
               description={item.description}
-              setLocal={setLocalBooks}
             />
           ))}
 

@@ -1,6 +1,7 @@
-import { AiOutlinePlus } from 'react-icons/ai'
+import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai'
 
 import bookPlaceholderSvg from '../assets/book-placeholder.svg'
+import { useLocalStorage } from '../context/localStorage'
 
 export default function BookCard({
   id,
@@ -8,10 +9,15 @@ export default function BookCard({
   thumbnail = bookPlaceholderSvg,
   description,
   authors,
-  publisher,
-  setLocal
+  publisher
 }) {
-  function handleClick() {
+  const { localBooks, setLocalBooks } = useLocalStorage()
+
+  const exist = localBooks?.find((li) => li.id === id) ?? null
+
+  function handleAddClick() {
+    if (exist) return
+
     const newBook = {
       id,
       title,
@@ -21,12 +27,13 @@ export default function BookCard({
       publisher
     }
 
-    setLocal((prev) => {
-      const exist = prev?.find((i) => i.id === id)
-      if (exist) return prev
+    setLocalBooks((prev) => [...prev, newBook])
+  }
 
-      return [...prev, newBook]
-    })
+  function handleDeleteClick(id) {
+    const newBooks = localBooks.filter((li) => li.id !== id)
+
+    setLocalBooks(newBooks)
   }
 
   return (
@@ -60,12 +67,21 @@ export default function BookCard({
         </p>
 
         <div className='absolute top-0 right-0 bottom-0 mr-4 flex items-center justify-end sm:mr-[-1rem]'>
-          <button
-            className='grid h-10 w-10 place-items-center rounded-full bg-blue-500 text-lg text-white'
-            onClick={handleClick}
-          >
-            <AiOutlinePlus />
-          </button>
+          {exist ? (
+            <button
+              className='grid h-10 w-10 place-items-center rounded-full bg-red-500 text-lg text-white'
+              onClick={() => handleDeleteClick(id)}
+            >
+              <AiOutlineClose />
+            </button>
+          ) : (
+            <button
+              className='grid h-10 w-10 place-items-center rounded-full bg-blue-500 text-lg text-white'
+              onClick={handleAddClick}
+            >
+              <AiOutlinePlus />
+            </button>
+          )}
         </div>
       </div>
     </article>
