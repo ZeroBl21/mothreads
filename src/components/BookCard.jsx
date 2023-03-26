@@ -1,4 +1,7 @@
-import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai'
+import {
+  AiOutlineClose,
+} from 'react-icons/ai'
+import { FiBookmark, FiPlus } from 'react-icons/fi'
 
 import bookPlaceholderSvg from '../assets/book-placeholder.svg'
 import { useLocalStorage } from '../context/localStorage'
@@ -9,7 +12,8 @@ export default function BookCard({
   thumbnail = bookPlaceholderSvg,
   description,
   authors,
-  publisher
+  publisher,
+  isFavorite = false
 }) {
   const { localBooks, setLocalBooks } = useLocalStorage()
 
@@ -24,16 +28,31 @@ export default function BookCard({
       thumbnail,
       description,
       authors,
-      publisher
+      publisher,
+      isFavorite: false
     }
 
     setLocalBooks((prev) => [...prev, newBook])
   }
 
   function handleDeleteClick(id) {
-    const newBooks = localBooks.filter((li) => li.id !== id)
+    const newBooks = localBooks.filter((book) => book.id !== id)
 
     setLocalBooks(newBooks)
+  }
+
+  function handleFavoriteClick(id) {
+    const updatedBooks = localBooks.map((book) => {
+      if (book.id === id) {
+        return {
+          ...book,
+          isFavorite: !book.isFavorite
+        }
+      }
+      return book
+    })
+
+    setLocalBooks(updatedBooks)
   }
 
   return (
@@ -51,7 +70,9 @@ export default function BookCard({
 
       <div className='px-4'>
         <div className='flex flex-col items-center justify-between gap-4 sm:flex-row'>
-          <h2 className='text-xl font-semibold'>{title}</h2>
+          <h2 className='text-center text-xl font-semibold sm:text-left'>
+            {title}
+          </h2>
           <div className='grid text-center sm:text-right'>
             <span className='font-medium'>
               {authors ? authors.join(', ') : 'Desconocido'}
@@ -66,20 +87,28 @@ export default function BookCard({
           {description ? description.slice(0, 500) : 'Sin Descripción'}
         </p>
 
-        <div className='absolute top-0 right-0 bottom-0 mr-4 flex items-center justify-end sm:mr-[-1rem]'>
+        <div className='absolute top-0 right-0 bottom-0 flex items-center justify-end mr-[-1rem]'>
           {exist ? (
-            <button
-              className='grid h-10 w-10 place-items-center rounded-full bg-red-500 text-lg text-white'
-              onClick={() => handleDeleteClick(id)}
-            >
-              <AiOutlineClose />
-            </button>
+            <div className='flex flex-col items-center gap-8'>
+              <button
+                className='grid h-10 w-10 place-items-center rounded-full bg-red-600 text-lg text-white'
+                onClick={() => handleDeleteClick(id)}
+              >
+                <AiOutlineClose />
+              </button>
+              <button
+                className='grid h-10 w-10 place-items-center rounded-full bg-blue-500 text-lg text-white'
+                onClick={() => handleFavoriteClick(id)}
+              >
+                <FiBookmark className={`${isFavorite ? 'fill-white': ''}`}/>
+              </button>
+            </div>
           ) : (
             <button
               className='grid h-10 w-10 place-items-center rounded-full bg-blue-500 text-lg text-white'
               onClick={handleAddClick}
             >
-              <AiOutlinePlus />
+              <FiPlus />
             </button>
           )}
         </div>

@@ -54,6 +54,7 @@ function Home() {
               thumbnail={item.thumbnail}
               publisher={item.publisher}
               description={item.description}
+              favorite={item?.isFavorite}
             />
           ))}
 

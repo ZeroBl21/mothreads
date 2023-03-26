@@ -1,4 +1,4 @@
-import { FiBook, FiHome, FiSearch, FiHeart, FiSettings } from 'react-icons/fi'
+import { FiBook, FiHome, FiSearch, FiBookmark, FiSettings } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 
 import Logo from '../components/Logo'
@@ -30,7 +30,7 @@ export default function Navbar() {
           </Link>
         </li>
         <li>
-          <Link className='hover:brightness-125' to='/' title='Books'>
+          <Link className='hover:brightness-125' to='/bookshelf' title='Books'>
             <FiBook size={24} aria-label='Books' />
           </Link>
         </li>
@@ -40,7 +40,7 @@ export default function Navbar() {
             to='/favorites'
             title='Favorites'
           >
-            <FiHeart size={24} aria-label='Favorites' />
+            <FiBookmark size={24} aria-label='Favorites' />
           </Link>
         </li>
       </ul>
