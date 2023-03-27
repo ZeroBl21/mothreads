@@ -9,6 +9,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/bookshelf' element={<Bookshelf />} />
+        <Route path='/favorites' element={<Bookshelf />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </Router>
