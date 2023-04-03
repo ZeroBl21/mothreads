@@ -1,11 +1,19 @@
 import bookPlaceholderSvg from './assets/book-placeholder.svg'
 
-const loadingBook = {
+export const loadingBook = {
   title: 'Loading...',
   authors: ['loading...'],
   thumbnail: bookPlaceholderSvg,
   publisher: 'Loading Publishing',
+  publishedDate: 'Loading...',
   description: 'Loading...',
+  categories: 'Loading...',
+  pages: 'Loading...',
+  dimensions: {
+    width: 'Loading...',
+    height: 'Loading...',
+    depth: 'Loading...'
+  },
   loadingBook: true
 }
 
@@ -14,30 +22,56 @@ const loadingBooks = Array.from({ length: 10 }, (v, index) => ({
   ...loadingBook
 }))
 
+const searchUrl = import.meta.env.VITE_SEARCH_URL
+const baseUrl = import.meta.env.VITE_BASE_URL
+
 const api = {
   books: {
-    search: async (query, startIndex = 0, maxResults = 10) => {
+    async list(query, startIndex = 0, maxResults = 10) {
       try {
-        const rawData = await (
-          await fetch(
-            `${
-              import.meta.env.VITE_SEARCH_URL
-            }${query}&startIndex=${startIndex}&maxResults=${maxResults}`
-          )
-        ).json()
-
+        const response = await fetch(
+          `${searchUrl}${query}&startIndex=${startIndex}&maxResults=${maxResults}`
+        )
+        const rawData = await response.json()
         const data = rawData?.items?.map((item) => ({
           id: item.id,
           title: item.volumeInfo.title,
           authors: item.volumeInfo?.authors,
           thumbnail: item.volumeInfo?.imageLinks?.thumbnail,
           publisher: item.volumeInfo.publisher,
-          description: item.volumeInfo?.description
+          description: item.volumeInfo?.description,
+          categories: item.volumeInfo?.categories,
+          pages: item.volumeInfo?.pageCount,
+          dimensions: item.volumeInfo?.dimensions
         }))
-
         return data ?? loadingBooks
-      } catch (e) {
-        console.error(e)
+      } catch (error) {
+        console.error(error)
+        return []
+      }
+    },
+
+    async find(id) {
+      try {
+        const response = await fetch(`${baseUrl}/${id}`)
+        const rawData = await response.json()
+        const data = {
+          id: rawData.id,
+          title: rawData.volumeInfo.title,
+          authors: rawData.volumeInfo?.authors ?? [],
+          publisher: rawData.volumeInfo.publisher,
+          publishedDate: rawData.volumeInfo?.publishedDate ?? 'Unknown',
+          thumbnail:
+            rawData.volumeInfo?.imageLinks?.thumbnail ?? bookPlaceholderSvg,
+          description: rawData.volumeInfo?.description ?? 'No description available.',
+          categories: rawData.volumeInfo?.categories ?? 'Unknown',
+          pages: rawData.volumeInfo?.pageCount ?? 'Unknown',
+          dimensions: rawData.volumeInfo?.dimensions
+        }
+
+        return data ?? loadingBook
+      } catch (error) {
+        console.error(error)
         return []
       }
     }

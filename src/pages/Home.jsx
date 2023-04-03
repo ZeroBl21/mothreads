@@ -18,7 +18,7 @@ function Home() {
     if (!query) return
 
     setLoading(true)
-    const books = await api.books.search(query, startIndex)
+    const books = await api.books.list(query, startIndex)
     setLoading(false)
     setBooks(books)
   }
@@ -28,7 +28,7 @@ function Home() {
     setStartIndex(newStartIndex)
 
     setLoading(true)
-    const newBooks = await api.books.search(query, newStartIndex)
+    const newBooks = await api.books.list(query, newStartIndex)
     setLoading(false)
     setBooks((prev) => [...prev, ...newBooks])
   }
