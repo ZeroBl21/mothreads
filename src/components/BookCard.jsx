@@ -1,6 +1,5 @@
-import {
-  AiOutlineClose,
-} from 'react-icons/ai'
+import { Link } from 'react-router-dom'
+import { AiOutlineClose } from 'react-icons/ai'
 import { FiBookmark, FiPlus } from 'react-icons/fi'
 
 import bookPlaceholderSvg from '../assets/book-placeholder.svg'
@@ -71,7 +70,9 @@ export default function BookCard({
       <div className='px-4'>
         <div className='flex flex-col items-center justify-between gap-4 sm:flex-row'>
           <h2 className='text-center text-xl font-semibold sm:text-left'>
-            {title}
+            <Link className='hover:underline' to={`/bookshelf/${id}`}>
+              {title}
+            </Link>
           </h2>
           <div className='grid text-center sm:text-right'>
             <span className='font-medium'>
@@ -87,20 +88,20 @@ export default function BookCard({
           {description ? description.slice(0, 500) : 'Sin Descripción'}
         </p>
 
-        <div className='absolute top-0 right-0 bottom-0 flex items-center justify-end mr-[-1rem]'>
+        <div className='absolute top-0 right-0 bottom-0 mr-[-1rem] flex items-center justify-end'>
           {exist ? (
             <div className='flex flex-col items-center gap-8'>
+              <button
+                className='grid h-10 w-10 place-items-center rounded-full bg-blue-500 text-lg text-white'
+                onClick={() => handleFavoriteClick(id)}
+              >
+                <FiBookmark className={`${isFavorite ? 'fill-white' : ''}`} />
+              </button>
               <button
                 className='grid h-10 w-10 place-items-center rounded-full bg-red-600 text-lg text-white'
                 onClick={() => handleDeleteClick(id)}
               >
                 <AiOutlineClose />
-              </button>
-              <button
-                className='grid h-10 w-10 place-items-center rounded-full bg-blue-500 text-lg text-white'
-                onClick={() => handleFavoriteClick(id)}
-              >
-                <FiBookmark className={`${isFavorite ? 'fill-white': ''}`}/>
               </button>
             </div>
           ) : (
