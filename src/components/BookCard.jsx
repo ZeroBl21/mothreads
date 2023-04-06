@@ -1,62 +1,13 @@
 import { Link } from 'react-router-dom'
-import { AiOutlineClose } from 'react-icons/ai'
-import { FiBookmark, FiPlus } from 'react-icons/fi'
 
-import bookPlaceholderSvg from '../assets/book-placeholder.svg'
-import { useLocalStorage } from '../context/localStorage'
+import StatusButtons from './StatusButtons'
 
-export default function BookCard({
-  id,
-  title,
-  thumbnail = bookPlaceholderSvg,
-  description,
-  authors,
-  publisher,
-  isFavorite = false
-}) {
-  const { localBooks, setLocalBooks } = useLocalStorage()
-
-  const exist = localBooks?.find((li) => li.id === id) ?? null
-
-  function handleAddClick() {
-    if (exist) return
-
-    const newBook = {
-      id,
-      title,
-      thumbnail,
-      description,
-      authors,
-      publisher,
-      isFavorite: false
-    }
-
-    setLocalBooks((prev) => [...prev, newBook])
-  }
-
-  function handleDeleteClick(id) {
-    const newBooks = localBooks.filter((book) => book.id !== id)
-
-    setLocalBooks(newBooks)
-  }
-
-  function handleFavoriteClick(id) {
-    const updatedBooks = localBooks.map((book) => {
-      if (book.id === id) {
-        return {
-          ...book,
-          isFavorite: !book.isFavorite
-        }
-      }
-      return book
-    })
-
-    setLocalBooks(updatedBooks)
-  }
+export default function BookCard(book) {
+  const { id, title, thumbnail, description, authors, publisher } = book
 
   return (
     <article
-      className='relative rounded bg-gray-800 py-6 px-4 sm:grid'
+      className='relative rounded bg-gray-800 px-4 py-6 sm:grid'
       style={{ gridTemplateColumns: '1fr 3fr' }}
     >
       <figure className='m-4 grid place-items-center'>
@@ -88,30 +39,10 @@ export default function BookCard({
           {description ? description.slice(0, 500) : 'Sin Descripción'}
         </p>
 
-        <div className='absolute top-0 right-0 bottom-0 mr-[-1rem] flex items-center justify-end'>
-          {exist ? (
-            <div className='flex flex-col items-center gap-8'>
-              <button
-                className='grid h-10 w-10 place-items-center rounded-full bg-blue-500 text-lg text-white'
-                onClick={() => handleFavoriteClick(id)}
-              >
-                <FiBookmark className={`${isFavorite ? 'fill-white' : ''}`} />
-              </button>
-              <button
-                className='grid h-10 w-10 place-items-center rounded-full bg-red-600 text-lg text-white'
-                onClick={() => handleDeleteClick(id)}
-              >
-                <AiOutlineClose />
-              </button>
-            </div>
-          ) : (
-            <button
-              className='grid h-10 w-10 place-items-center rounded-full bg-blue-500 text-lg text-white'
-              onClick={handleAddClick}
-            >
-              <FiPlus />
-            </button>
-          )}
+        <div className='absolute bottom-0 right-0 top-0 mr-[-1rem] flex items-center justify-end'>
+          <div className='flex flex-col items-center gap-8'>
+            <StatusButtons book={book} />
+          </div>
         </div>
       </div>
     </article>
