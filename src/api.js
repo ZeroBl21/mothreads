@@ -22,8 +22,8 @@ const loadingBooks = Array.from({ length: 10 }, (v, index) => ({
   ...loadingBook
 }))
 
-const searchUrl = import.meta.env.VITE_SEARCH_URL
-const baseUrl = import.meta.env.VITE_BASE_URL
+const searchUrl = 'https://www.googleapis.com/books/v1/volumes?q='
+const baseUrl = 'https://www.googleapis.com/books/v1/volumes'
 
 const api = {
   books: {

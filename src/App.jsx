@@ -6,8 +6,10 @@ import NotFound from './pages/NotFound'
 import BookDetails from './pages/BookDetails'
 
 function App() {
+  const basename = process.env.NODE_ENV === 'production' ? 'mothreads' : '/'
+
   return (
-    <Router>
+    <Router basename={basename}>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/bookshelf' element={<Bookshelf />} />
