@@ -15,8 +15,9 @@ export default function Navbar() {
   return (
     <nav
       className='
-        flex max-h-[100dvh] w-14 flex-col
-        items-center justify-between bg-gray-800
+        fixed flex h-[100dvh] w-14
+        flex-col items-center justify-between
+        bg-gray-800
         py-8
         text-gray-300
       '
