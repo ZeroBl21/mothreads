@@ -36,12 +36,15 @@ const api = {
         const data = rawData?.items?.map((item) => ({
           id: item.id,
           title: item.volumeInfo.title,
-          authors: item.volumeInfo?.authors,
-          thumbnail: item.volumeInfo?.imageLinks?.thumbnail,
+          authors: item.volumeInfo?.authors ?? [],
           publisher: item.volumeInfo.publisher,
-          description: item.volumeInfo?.description,
-          categories: item.volumeInfo?.categories,
-          pages: item.volumeInfo?.pageCount,
+          publishedDate: item.volumeInfo?.publishedDate ?? 'Unknown',
+          thumbnail:
+            item.volumeInfo?.imageLinks?.thumbnail ?? bookPlaceholderSvg,
+          description:
+            item.volumeInfo?.description ?? 'No description available.',
+          categories: item.volumeInfo?.categories ?? 'Unknown',
+          pages: item.volumeInfo?.pageCount ?? 'Unknown',
           dimensions: item.volumeInfo?.dimensions
         }))
         return data ?? loadingBooks
@@ -63,7 +66,8 @@ const api = {
           publishedDate: rawData.volumeInfo?.publishedDate ?? 'Unknown',
           thumbnail:
             rawData.volumeInfo?.imageLinks?.thumbnail ?? bookPlaceholderSvg,
-          description: rawData.volumeInfo?.description ?? 'No description available.',
+          description:
+            rawData.volumeInfo?.description ?? 'No description available.',
           categories: rawData.volumeInfo?.categories ?? 'Unknown',
           pages: rawData.volumeInfo?.pageCount ?? 'Unknown',
           dimensions: rawData.volumeInfo?.dimensions
