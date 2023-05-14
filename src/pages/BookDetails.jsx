@@ -6,6 +6,7 @@ import BaseLayout from './BaseLayout'
 import api, { loadingBook } from '../api'
 import BookInfo from '../components/BookInfo'
 import StatusButtons from '../components/StatusButtons'
+import { useLocalStorage } from '../context/localStorage'
 
 export default function BookDetails() {
   const { bookId } = useParams()
@@ -19,8 +20,12 @@ export default function BookDetails() {
     description,
     categories,
     pages,
-    dimensions
+    dimensions,
   } = book
+
+  const { localBooks, addComment } = useLocalStorage()
+  const matchingBook = localBooks?.find((li) => li.id === bookId) ?? null
+  const [comment, setComment] = useState(matchingBook?.comment || '')
 
   useEffect(() => {
     api.books.find(bookId).then(setBook)
@@ -29,6 +34,11 @@ export default function BookDetails() {
   function handleShare() {
     const url = window.location.href
     navigator.clipboard.writeText(url)
+  }
+
+  function deleteComment() {
+    addComment(matchingBook.id, '')
+    setComment('')
   }
 
   return (
@@ -64,6 +74,29 @@ export default function BookDetails() {
             pages={pages}
             dimensions={dimensions}
           />
+          {matchingBook?.isFinished ? (
+            <div>
+              <h2 className='pt-4 text-lg font-bold'>Comments</h2>
+              <textarea
+                className='mt-4 w-full rounded bg-transparent p-4 text-white outline outline-slate-600'
+                placeholder='How was your experience?'
+                onChange={(e) => setComment(e.target.value)}
+                value={comment}
+              ></textarea>
+              <button
+                onClick={() => addComment(matchingBook.id, comment)}
+                className='mt-2 rounded bg-green-600 px-4 py-2'
+              >
+                Save
+              </button>
+              <button
+                onClick={deleteComment}
+                className='ml-2 mt-2 rounded bg-gray-600 px-4 py-2'
+              >
+                Delete
+              </button>
+            </div>
+          ) : null}
         </div>
       </article>
     </BaseLayout>

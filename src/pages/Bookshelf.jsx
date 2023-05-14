@@ -9,10 +9,15 @@ function Bookshelf() {
   const location = useLocation()
 
   const favorites = location.pathname === '/favorites'
+  const finished = location.pathname === '/finished'
   let visibleBooks = localBooks
 
   if (favorites) {
     visibleBooks = localBooks.filter((book) => book.isFavorite)
+  }
+
+  if(finished) {
+    visibleBooks = localBooks.filter((book) => book.isFinished)
   }
 
   return (

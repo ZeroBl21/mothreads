@@ -1,5 +1,5 @@
 import { AiOutlineClose } from 'react-icons/ai'
-import { FiBookmark, FiPlus } from 'react-icons/fi'
+import { FiBookmark, FiPlus, FiEye, FiEyeOff } from 'react-icons/fi'
 
 import { useLocalStorage } from '../context/localStorage'
 
@@ -39,6 +39,20 @@ export default function StatusButtons({ book }) {
     setLocalBooks(updatedBooks)
   }
 
+  function toggleRead(id) {
+    const updatedBooks = localBooks.map((book) => {
+      if (book.id === id) {
+        return {
+          ...book,
+          isFinished: !book.isFinished
+        }
+      }
+      return book
+    })
+
+    setLocalBooks(updatedBooks)
+  }
+
   return (
     <>
       {matchingBook ? (
@@ -50,6 +64,12 @@ export default function StatusButtons({ book }) {
             <FiBookmark
               className={`${matchingBook.isFavorite ? 'fill-white' : ''}`}
             />
+          </button>
+          <button
+            className='grid h-10 w-10 place-items-center rounded-full bg-gray-600 text-lg text-white transition ease-in hover:scale-110 hover:brightness-125'
+            onClick={() => toggleRead(book.id)}
+          >
+            {matchingBook?.isFinished ? <FiEyeOff/> : <FiEye />}
           </button>
           <button
             className='grid h-10 w-10 place-items-center rounded-full bg-red-600 text-lg text-white transition ease-in hover:scale-110 hover:brightness-125'

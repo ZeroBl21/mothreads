@@ -9,8 +9,22 @@ export function LocalStorageProvider({ children }) {
     []
   )
 
+  function addComment(id, comment) {
+    const updatedBooks = localBooks.map((book) => {
+      if (book.id === id) {
+        return {
+          ...book,
+          comment
+        }
+      }
+      return book
+    })
+
+    setLocalBooks(updatedBooks)
+  }
+
   return (
-    <LocalStorageContext.Provider value={{ localBooks, setLocalBooks }}>
+    <LocalStorageContext.Provider value={{ localBooks, setLocalBooks, addComment }}>
       {children}
     </LocalStorageContext.Provider>
   )

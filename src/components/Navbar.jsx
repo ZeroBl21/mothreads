@@ -1,9 +1,9 @@
 import {
   FiBook,
   FiHome,
-  FiSearch,
   FiBookmark,
-  FiSettings
+  FiSettings,
+  FiEye
 } from 'react-icons/fi'
 import { Link, useLocation } from 'react-router-dom'
 
@@ -38,17 +38,6 @@ export default function Navbar() {
           </Link>
         </li>
         <li>
-          <Link className='hover:brightness-125' to='/search' title='Search'>
-            <FiSearch
-              size={24}
-              aria-label='Search'
-              className={` ${
-                location.pathname === '/search' && 'stroke-sky-300'
-              }`}
-            />
-          </Link>
-        </li>
-        <li>
           <Link className='hover:brightness-125' to='/bookshelf' title='Books'>
             <FiBook
               size={24}
@@ -70,6 +59,17 @@ export default function Navbar() {
               aria-label='Favorites'
               className={` ${
                 location.pathname === '/favorites' && 'stroke-sky-300'
+              }`}
+            />
+          </Link>
+        </li>
+        <li>
+          <Link className='hover:brightness-125' to='/finished' title='Search'>
+            <FiEye
+              size={24}
+              aria-label='Finished'
+              className={` ${
+                location.pathname === '/finished' && 'stroke-sky-300'
               }`}
             />
           </Link>
